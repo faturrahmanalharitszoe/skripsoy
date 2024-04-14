@@ -1,0 +1,13 @@
+train: ./dataset_torch/train/images
+val: ./dataset_torch/valid/images
+test: ./dataset_torch/test/images
+
+nc: 14
+names: ["0", "Bangku", "Human", "Jakarta", "Kota Padang", "Mobil", "Motor", "Pekanbaru Riau", "Plat Kendaraan", "Tangan", "plat", "plat-nomor", "platNomor", "plate"]
+
+roboflow:
+  workspace: project
+  project: platnomor-u1vjp
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/project/platnomor-u1vjp/dataset/1
