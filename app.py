@@ -10,8 +10,8 @@ pathlib.PosixPath = pathlib.WindowsPath
 
 app = Flask(__name__)
 
-crop_model_path = 'flask\models\crop.pt'
-ocr_model_path = 'flask\models\ocr.pt'
+crop_model_path = '.\crop.pt'
+ocr_model_path = '.\ocr.pt'
 
 # Load the YOLOv5 model from Ultralytics
 crop_model = torch.hub.load('ultralytics/yolov5', 'custom', path=crop_model_path)
