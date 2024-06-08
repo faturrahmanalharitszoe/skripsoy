@@ -21,4 +21,5 @@ ENV PORT=8080
 # Use gunicorn as the entry point for running the application. Gunicorn is a WSGI HTTP Server for UNIX.
 # It's a pre-fork worker model ported from Ruby's Unicorn project.
 # The "-b :$PORT" option binds gunicorn to the port defined by the PORT environment variable.
-CMD ["gunicorn", "-b", ":8080", "app:app"]
+CMD ["python", "app.py"]
+
