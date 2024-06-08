@@ -5,7 +5,7 @@ FROM python:3.10-slim
 COPY app.py .
 
 # Install any required Python packages
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r /requirements.txt
 
 # Expose the port for Cloud Run
 EXPOSE 8080
