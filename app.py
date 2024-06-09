@@ -7,7 +7,7 @@ import pathlib
 
 app = Flask(__name__)
 
-crop_model_path = '/model.pt'
+crop_model_path = '/crop.pt'
 ocr_model_path = '/ocr.pt'
 
 # Load the YOLOv5 model from Ultralytics
