@@ -7,12 +7,12 @@ import pathlib
 
 app = Flask(__name__)
 
-crop_model_path = '/crop.pt'
-ocr_model_path = '/ocr.pt'
+crop_model_path = '/app/crop.pt'
+ocr_model_path = '/app/ocr.pt'
 
 # Load the YOLOv5 model from Ultralytics
-crop_model = torch.hub.load('ultralytics/yolov5', 'custom', path=crop_model_path)
-ocr_model = torch.hub.load('ultralytics/yolov5', 'custom', path=ocr_model_path)
+crop_model = torch.hub.load('ultralytics/yolov5', 'custom', path=str(crop_model_path))
+ocr_model = torch.hub.load('ultralytics/yolov5', 'custom', path=str(ocr_model_path))
 
 # def detect_and_crop_objects(image, conf_thres=0.25, iou_thres=0.45, imgsz=640):
 #     # Perform inference
