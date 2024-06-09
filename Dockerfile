@@ -12,8 +12,8 @@ COPY . /app
 WORKDIR /app
 
 # Expose the port for Cloud Run
-EXPOSE 8080
-ENV PORT=8080
+EXPOSE 5000
+ENV PORT=5000
 
 # Run the Flask application
 CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 app:app
