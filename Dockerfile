@@ -18,4 +18,4 @@ EXPOSE 5000
 ENV FLASK_APP=app
 
 # Run the Flask application with Gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
+app.run(port=int(os.environ.get("PORT",5000)),host='0.0.0.0',debug=True)
