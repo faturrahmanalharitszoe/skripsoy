@@ -7,8 +7,8 @@ import pathlib
 
 app = Flask(__name__)
 
-crop_model_path = '/app/model.pt'
-ocr_model_path = '/app/ocr.pt'
+crop_model_path = '/model.pt'
+ocr_model_path = '/ocr.pt'
 
 # Load the YOLOv5 model from Ultralytics
 crop_model = torch.hub.load('ultralytics/yolov5', 'custom', path=crop_model_path)
