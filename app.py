@@ -5,9 +5,6 @@ import numpy as np
 import os
 import pathlib
 
-temp = pathlib.PosixPath
-pathlib.PosixPath = pathlib.WindowsPath
-
 app = Flask(__name__)
 
 crop_model_path = '/app/model.pt'
