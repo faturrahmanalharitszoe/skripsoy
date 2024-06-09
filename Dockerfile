@@ -14,8 +14,8 @@ COPY . .
 # Expose the port for Cloud Run
 EXPOSE 5000
 
-# Set the environment variable for the port
-ENV FLASK_APP=app.py
+# Set the environment variable for the Flask app
+ENV FLASK_APP=app
 
 # Run the Flask application with Gunicorn
-CMD ["flask", "run", "--host=0.0.0.0"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
