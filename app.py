@@ -1,11 +1,10 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 import cv2
 import torch
 import numpy as np
-import os
 import base64
+import zlib
 import io
-from PIL import Image
 
 app = Flask(__name__)
 
@@ -57,30 +56,37 @@ def perform_ocr_on_image(image):
 
 @app.route('/detect_and_ocr', methods=['POST'])
 def detect_and_ocr():
-    if 'image' not in request.files:
-        return jsonify({'error': 'No image uploaded'})
-    image_file = request.files['image']
-    image_np = np.frombuffer(image_file.read(), np.uint8)
-    image = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
-    
-    # Detect and crop objects
-    cropped_images = detect_and_crop_objects(image)
-    
-    result = []
-    for cropped_img in cropped_images:
-        # Perform OCR on the cropped image
-        ocr_result = perform_ocr_on_image(cropped_img)
+    try:
+        if 'image' not in request.files:
+            return jsonify({'error': 'No image uploaded'})
         
-        # Encode the cropped image in base64 format
-        _, buffer = cv2.imencode('.jpg', cropped_img)
-        img_base64 = base64.b64encode(buffer).decode('utf-8')
+        image_file = request.files['image']
+        image_np = np.frombuffer(image_file.read(), np.uint8)
+        image = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
         
-        result.append({
-            'cropped_image': img_base64,
-            'ocr_result': ocr_result
-        })
+        # Detect and crop objects
+        cropped_images = detect_and_crop_objects(image)
+        
+        result = []
+        for cropped_img in cropped_images:
+            # Perform OCR on the cropped image
+            ocr_result = perform_ocr_on_image(cropped_img)
+            
+            # Encode the cropped image in base64 format
+            _, buffer = cv2.imencode('.jpg', cropped_img)
+            img_base64 = base64.b64encode(buffer).decode('utf-8')
+            
+            result.append({
+                'cropped_image': img_base64,
+                'ocr_result': ocr_result
+            })
 
-    return jsonify(result)
+        compressed_result = zlib.compress(json.dumps(result).encode('utf-8'))
+        response = Response(compressed_result, content_type='application/json')
+        response.headers['Content-Encoding'] = 'gzip'
+        return response
+    except Exception as e:
+        return jsonify({'error': str(e)})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
