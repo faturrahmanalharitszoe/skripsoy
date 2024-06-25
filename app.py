@@ -39,7 +39,7 @@ def perform_ocr_on_image(image):
     img_clahe = clahe.apply(img_gray)
     img_clahe = cv2.cvtColor(img_clahe, cv2.COLOR_GRAY2BGR)
 
-	@@ -79,22 +47,40 @@ def detect_objects():
+def detect_objects():
     # Sort the filtered results horizontally by the x-axis of the bounding box
     sorted_filtered_results = filtered_results[filtered_results[:, 0].argsort()]
 
