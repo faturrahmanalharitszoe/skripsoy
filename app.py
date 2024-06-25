@@ -17,6 +17,7 @@ ocr_model_path = '/app/ocr.pt'
 # Load the YOLOv5 models from Ultralytics
 crop_model = torch.hub.load('ultralytics/yolov5', 'custom', path=str(crop_model_path))
 ocr_model = torch.hub.load('ultralytics/yolov5', 'custom', path=str(ocr_model_path))
+
 def detect_and_crop_objects(image, conf_thres=0.25, iou_thres=0.45, imgsz=640):
     # Perform inference
     results = crop_model(image)
@@ -39,7 +40,10 @@ def perform_ocr_on_image(image):
     img_clahe = clahe.apply(img_gray)
     img_clahe = cv2.cvtColor(img_clahe, cv2.COLOR_GRAY2BGR)
 
-def detect_objects():
+    # Perform inference
+    results = ocr_model(img_clahe)
+    # Filter detections with confidence > 0.6
+    filtered_results = results.xyxy[0][results.xyxy[0][:, 4] > 0.6]
     # Sort the filtered results horizontally by the x-axis of the bounding box
     sorted_filtered_results = filtered_results[filtered_results[:, 0].argsort()]
 
