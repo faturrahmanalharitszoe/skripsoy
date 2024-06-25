@@ -1,13 +1,12 @@
-from flask import Flask, request, jsonify, Response
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 import cv2
 import torch
 import numpy as np
-import os
 import base64
-import io
-from PIL import Image
 
 app = Flask(__name__)
+CORS(app)
 
 crop_model_path = '/app/crop.pt'
 ocr_model_path = '/app/ocr.pt'
@@ -37,18 +36,7 @@ def perform_ocr_on_image(image):
     clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
     img_clahe = clahe.apply(img_gray)
     img_clahe = cv2.cvtColor(img_clahe, cv2.COLOR_GRAY2BGR)
-
-def detect_objects():
-    # Sort the filtered results horizontally by the x-axis of the bounding box
-    sorted_filtered_results = filtered_results[filtered_results[:, 0].argsort()]
-
-    # Extract class names in the order of sorted detections by X1
-    sorted_class_names = [ocr_model.names[int(cls)] for cls in sorted_filtered_results[:, -1]]
-
-    # Combine class names into a single string, preserving their left-to-right order in the image
-    combined_classes_text = ''.join(sorted_class_names)
-
-    return combined_classes_text
+    return "OCR_RESULT_PLACEHOLDER"
 
 @app.route('/detect_and_ocr', methods=['POST'])
 def detect_and_ocr():
