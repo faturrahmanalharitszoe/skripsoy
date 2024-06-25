@@ -4,7 +4,7 @@ import torch
 import numpy as np
 import base64
 import zlib
-import io
+import json
 
 app = Flask(__name__)
 
@@ -13,6 +13,7 @@ ocr_model_path = '/app/ocr.pt'
 # Load the YOLOv5 models from Ultralytics
 crop_model = torch.hub.load('ultralytics/yolov5', 'custom', path=str(crop_model_path))
 ocr_model = torch.hub.load('ultralytics/yolov5', 'custom', path=str(ocr_model_path))
+
 def detect_and_crop_objects(image, conf_thres=0.25, iou_thres=0.45, imgsz=640):
     # Perform inference
     results = crop_model(image)
@@ -26,7 +27,13 @@ def detect_and_crop_objects(image, conf_thres=0.25, iou_thres=0.45, imgsz=640):
         cropped_img = image[y1:y2, x1:x2]
         cropped_images.append(cropped_img)
     return cropped_images
-	@@ -57,30 +56,37 @@
+
+def perform_ocr_on_image(image):
+    # Perform OCR using the OCR model
+    results = ocr_model(image)
+    # Extract the OCR results
+    ocr_texts = results.pandas().xyxy[0].sort_values(by='confidence', ascending=False)['name'].tolist()
+    return ' '.join(ocr_texts)
 
 @app.route('/detect_and_ocr', methods=['POST'])
 def detect_and_ocr():
@@ -55,7 +62,8 @@ def detect_and_ocr():
                 'ocr_result': ocr_result
             })
 
-        compressed_result = zlib.compress(json.dumps(result).encode('utf-8'))
+        response_data = json.dumps(result)
+        compressed_result = zlib.compress(response_data.encode('utf-8'))
         response = Response(compressed_result, content_type='application/json')
         response.headers['Content-Encoding'] = 'gzip'
         return response
