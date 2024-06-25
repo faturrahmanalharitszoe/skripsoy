@@ -5,6 +5,7 @@ import numpy as np
 import base64
 import zlib
 import io
+import json  # Add this import
 
 app = Flask(__name__)
 
